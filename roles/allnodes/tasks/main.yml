@@ -1,0 +1,31 @@
+---
+- name: Install Prometheus on Ubuntu
+  apt:
+    name: prometheus
+    state: present
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Add Prometheus repository on CentOS
+  yum_repository:
+    name: prometheus
+    description: Prometheus repository
+    baseurl: https://packagecloud.io/prometheus-rpm/release/el/7/$basearch
+    gpgcheck: no
+  when: ansible_distribution == 'CentOS'
+
+- name: Install Prometheus on CentOS
+  yum:
+    name: prometheus
+    state: present
+  when: ansible_distribution == 'CentOS'
+
+- name: Update package cache
+  apt:
+    update_cache: yes
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Update package cache
+  yum:
+    name: '*'
+    state: latest
+  when: ansible_distribution == 'CentOS'
